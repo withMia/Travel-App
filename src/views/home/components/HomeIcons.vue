@@ -36,13 +36,11 @@ export default {
   width: 100%
   // 宽高比 防抖
   height: 0
-  padding-bottom: 58%
+  padding-bottom: 56%
 .icons :deep(.swiper-pagination-bullet-active)
   background: red !important
-
 .icons
-.icons
-  z-index:1000
+  margin-top:0.1rem
   .icon
     position: relative
     overflow: hidden
