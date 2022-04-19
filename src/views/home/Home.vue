@@ -1,22 +1,26 @@
 <template>
   <div class="home">
-    <home-header></home-header>
-    <home-swiper :swiperConfig="swiperConfig"></home-swiper>
-    <home-icons></home-icons>
-    <home-recommend :recommendConfig="recommendConfig"></home-recommend>
-    <home-weekend :recommendConfig="recommendConfig"></home-weekend>
+    <home-header :city="city"></home-header>
+    <home-swiper :swiperList="swiperList"></home-swiper>
+    <home-icons :iconList="iconList"></home-icons>
+    <home-recommend :recommendList="recommendList"></home-recommend>
+    <home-weekend :weekendList="weekendList"></home-weekend>
   </div>
 </template>
 
 <script>
+//reactive, toRefs,
+import { onMounted, reactive, toRefs } from 'vue'
 import HomeHeader from './components/HomeHeader.vue'
 import HomeSwiper from './components/HomeSwiper.vue'
 import HomeIcons from './components/HomeIcons.vue'
 import HomeRecommend from './components/HomeRecommend.vue'
 import HomeWeekend from './components/HomeWeekend.vue'
 
-import { swiperConfig } from './config/swiperConfig.js'
-import { recommendConfig } from './config/recommendConfig.js'
+// import { swiperConfig } from './config/swiperConfig.js'
+// import { recommendConfig } from './config/recommendConfig.js'
+import axios from 'axios'
+
 export default {
   name: 'Home',
   components: {
@@ -27,9 +31,34 @@ export default {
     HomeWeekend
   },
   setup() {
+    let dataSet = reactive({
+      // data: {}
+      city: '',
+      swiperList: [],
+      iconList: [],
+      recommendList: [],
+      weekendList: []
+    })
+    // let dataSet = ref({})
+    const getHomeInfoSucc = function (res) {
+      res = res.data
+      if (res.ret && res.data) {
+        dataSet.city = res.data.city
+        dataSet.swiperList = res.data.swiperList
+        dataSet.iconList = res.data.iconList
+        dataSet.recommendList = res.data.recommendList
+        dataSet.weekendList = res.data.weekendList
+      }
+    }
+    const getHomeInfo = function () {
+      axios.get('/api/index.json').then(getHomeInfoSucc)
+    }
+    onMounted(() => {
+      getHomeInfo()
+    })
+
     return {
-      swiperConfig,
-      recommendConfig
+      ...toRefs(dataSet)
     }
   }
 }

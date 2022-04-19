@@ -2,11 +2,7 @@
   <div class="home-weekend">
     <div class="title">周末去哪儿</div>
     <ul>
-      <li
-        class="item border-bottom"
-        v-for="item of recommendConfig.list"
-        :key="item.id"
-      >
+      <li class="item border-bottom" v-for="item of weekendList" :key="item.id">
         <div class="item-img-wrapper">
           <img :src="item.imgUrl" alt="" class="item-img" />
         </div>
@@ -25,8 +21,8 @@
 export default {
   name: 'HomeWeekend',
   props: {
-    recommendConfig: {
-      type: Object,
+    weekendList: {
+      type: Array,
       required: true
     }
   }

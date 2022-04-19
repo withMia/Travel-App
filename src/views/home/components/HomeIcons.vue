@@ -1,6 +1,6 @@
 <template>
   <div class="icons">
-    <base-swiper :swiperConfig="iconsConfig">
+    <base-swiper :list="pageList">
       <template #swiper="{ rowdata }">
         <div class="icon" v-for="item of rowdata" :key="item.id">
           <div class="icon-img">
@@ -14,17 +14,24 @@
 </template>
 
 <script>
-import { iconsConfig } from '../config/iconsConfig.js'
 import BaseSwiper from '../../../base-ui/BaseSwiper.vue'
 import { pageNum } from '../../../utils/count-page-number.js'
+import { computed } from 'vue'
 
 export default {
   name: 'HomeIcons',
   components: { BaseSwiper },
-  setup() {
-    const list = pageNum(iconsConfig.fullList, 8)
-    iconsConfig.list = list
-    return { iconsConfig }
+  props: {
+    iconList: {
+      type: Array,
+      required: true
+    }
+  },
+  setup(props) {
+    const pageList = computed(() => {
+      return pageNum(props.iconList, 8)
+    })
+    return { pageList }
   }
 }
 </script>
@@ -34,11 +41,10 @@ export default {
 @import '~styles/mixins.styl';
 .icons :deep(.swiper)
   width: 100%
-  // 宽高比 防抖
   height: 0
   padding-bottom: 56%
 .icons :deep(.swiper-pagination-bullet-active)
-  background: red !important
+  background: $bgColor !important
 .icons
   margin-top:0.1rem
   .icon

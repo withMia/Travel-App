@@ -4,6 +4,17 @@ function resolve(dir) {
 }
 
 module.exports = {
+  devServer: {
+    proxy: {
+      '^/api': {
+        target: 'http://localhost:8080',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/api': '/mock-data'
+        }
+      }
+    }
+  },
   chainWebpack: (config) => {
     config.resolve.alias
       .set('@', resolve('./src'))
