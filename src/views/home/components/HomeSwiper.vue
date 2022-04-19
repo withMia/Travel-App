@@ -1,5 +1,11 @@
 <template>
-  <base-swiper :swiperConfig="swiperConfig"></base-swiper>
+  <div class="wrapper">
+    <base-swiper :swiperConfig="swiperConfig">
+      <template #swiper="{ rowdata }">
+        <img class="swiper-img" :src="rowdata.imgUrl" alt="图片无法加载" />
+      </template>
+    </base-swiper>
+  </div>
 </template>
 
 <script>
@@ -8,7 +14,7 @@ export default {
   name: 'HomeSwiper',
   props: {
     swiperConfig: {
-      type: Array
+      type: Object
     }
   },
 
@@ -19,4 +25,14 @@ export default {
 }
 </script>
 
-<style></style>
+<style lang="stylus" scoped>
+.wrapper :deep(.swiper-pagination-bullet-active)
+  background: red !important
+.wrapper
+  overflow: hidden
+  width: 100%
+  // height: 0
+  // padding-bottom: 62.5%
+  .swiper-img
+    width:100%;
+</style>

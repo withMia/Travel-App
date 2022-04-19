@@ -1,24 +1,27 @@
 <template>
   <div class="home">
     <home-header></home-header>
-    <home-swiper :swiperConfig="swiperList"></home-swiper>
-    <!-- <div>测试</div> -->
+    <home-swiper :swiperConfig="swiperConfig"></home-swiper>
+    <home-icons></home-icons>
   </div>
 </template>
 
 <script>
 import HomeHeader from './components/HomeHeader.vue'
 import HomeSwiper from './components/HomeSwiper.vue'
-import { swiperList } from './config/swiperConfig.js'
+import HomeIcons from './components/HomeIcons.vue'
+
+import { swiperConfig } from './config/swiperConfig.js'
 export default {
   name: 'Home',
   components: {
     HomeHeader,
-    HomeSwiper
+    HomeSwiper,
+    HomeIcons
   },
   setup() {
     return {
-      swiperList
+      swiperConfig
     }
   }
 }
