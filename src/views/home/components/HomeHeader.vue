@@ -32,6 +32,10 @@ export default {
 .home-header
   display: flex
   line-height: $headerHeight
+<<<<<<< HEAD
+=======
+  height: $headerHeight
+>>>>>>> main
   background-color: $bgColor
   color: #fff
   .header-left
