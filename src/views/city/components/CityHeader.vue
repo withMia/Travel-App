@@ -2,7 +2,7 @@
   <div class="city-header">
     城市选择
     <router-link to="/">
-      <div class="iconfont header-back">&#xe624;</div>
+      <div class="iconfont back-icon">&#xe624;</div>
     </router-link>
   </div>
 </template>
@@ -17,18 +17,18 @@ export default {
 @import '~styles/variables.styl'
 
 .city-header
-  height: $headerHeight
   line-height: $headerHeight
+  height: $headerHeight
+  background: $bgColor
   overflow: hidden
   color: #fff
-  text-align center
-  background: $bgColor
-  .header-back
+  text-align: center
+  .back-icon
     position: absolute
     top: 0
     left: 0
+    color: #fff
     width: 0.64rem
     text-align: center
     font-size: 0.4rem
-    color: #fff
 </style>

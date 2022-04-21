@@ -1,13 +1,18 @@
 <template>
-  <div class="city"><city-header></city-header></div>
+  <div class="city">
+    <city-header></city-header>
+    <city-search></city-search>
+  </div>
 </template>
 
 <script>
 import CityHeader from './components/CityHeader.vue'
+import CitySearch from './components/CitySearch.vue'
+
 export default {
   name: 'City',
-  components: { CityHeader }
+  components: { CityHeader, CitySearch }
 }
 </script>
 
-<style></style>
+<style lang="stylus" scoped></style>
