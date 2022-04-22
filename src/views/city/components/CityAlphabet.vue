@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import { computed, onBeforeUpdate, ref } from 'vue'
+import { computed, onBeforeUpdate, onUpdated, ref } from 'vue'
 export default {
   name: 'CityAlphabet',
   props: {
@@ -30,6 +30,8 @@ export default {
   setup(props, { emit }) {
     let divNodes = ref({})
     let touchStatus = false
+    let startY = 0
+    let timer = null
     onBeforeUpdate(() => {
       divNodes.value = {}
     })
@@ -40,25 +42,24 @@ export default {
       }
       return letters
     })
-
+    onUpdated(() => {
+      startY = divNodes.value['A'].offsetTop
+    })
     const handleTouchStart = () => {
       touchStatus = true
     }
     const handleTouchMove = (e) => {
       if (touchStatus) {
-        const startY = divNodes.value['A'].offsetTop
-        const touchY = e.touches[0].clientY - 79
-        const index = Math.floor((touchY - startY) / 16)
-        if (index >= 0 && index < letters.value.length) {
-          console.log(
-            startY,
-            divNodes.value['B'].offsetTop,
-
-            divNodes.value['Z'].offsetTop,
-            letters.value[index]
-          )
-          emit('scrollList', letters.value[index])
+        if (timer) {
+          clearTimeout(timer)
         }
+        timer = setTimeout(() => {
+          const touchY = e.touches[0].clientY - 79
+          const index = Math.floor((touchY - startY) / 16)
+          if (index >= 0 && index < letters.value.length) {
+            emit('scrollList', letters.value[index])
+          }
+        }, 16)
       }
     }
     const handleTouchEnd = () => {
