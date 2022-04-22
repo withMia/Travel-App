@@ -32,14 +32,12 @@ export default {
   },
   setup() {
     let dataSet = reactive({
-      // data: {}
       city: '',
       swiperList: [],
       iconList: [],
       recommendList: [],
       weekendList: []
     })
-    // let dataSet = ref({})
     const getHomeInfoSucc = function (res) {
       res = res.data
       if (res.ret && res.data) {
