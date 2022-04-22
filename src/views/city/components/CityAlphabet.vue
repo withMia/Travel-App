@@ -59,7 +59,7 @@ export default {
           if (index >= 0 && index < letters.value.length) {
             emit('scrollList', letters.value[index])
           }
-        }, 16)
+        }, 8)
       }
     }
     const handleTouchEnd = () => {

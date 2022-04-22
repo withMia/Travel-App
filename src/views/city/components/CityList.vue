@@ -5,15 +5,22 @@
         <div class="title border-topbottom">当前城市</div>
         <div class="button-list">
           <div class="button-wrapper">
-            <div class="button">北京</div>
+            <div class="button">{{ currentCity }}</div>
           </div>
         </div>
       </div>
       <div class="area">
         <div class="title border-topbottom">热门城市</div>
         <div class="button-list">
-          <div class="button-wrapper" v-for="item of hotCities" :key="item.id">
-            <div class="button">{{ item.name }}</div>
+          <div
+            class="button-wrapper"
+            @click="handleCityClick(item.name)"
+            v-for="item of hotCities"
+            :key="item.id"
+          >
+            <div class="button">
+              {{ item.name }}
+            </div>
           </div>
         </div>
       </div>
@@ -30,6 +37,7 @@
         <div class="title border-topbottom">{{ key }}</div>
         <div class="item-list">
           <div
+            @click="handleCityClick(subItem.name)"
             class="item border-bottom"
             v-for="subItem of item"
             :key="subItem.id"
@@ -44,8 +52,9 @@
 
 <script>
 import BetterScroll from 'better-scroll'
-import { onMounted, watch, ref, onBeforeUpdate } from 'vue'
-
+import { onMounted, watch, ref, onBeforeUpdate, computed } from 'vue'
+import { useStore } from 'vuex'
+import router from '../../../router'
 export default {
   name: 'CityList',
   props: {
@@ -55,6 +64,8 @@ export default {
     letterClicked: { type: String }
   },
   setup(props) {
+    const store = useStore()
+    const currentCity = computed(() => store.state.city)
     let divNodes = ref({})
     onBeforeUpdate(() => {
       divNodes.value = {}
@@ -63,8 +74,8 @@ export default {
     let bs
     onMounted(() => {
       bs = new BetterScroll(wrapper.value, {
-        movable: true,
-        mouseWheel: true
+        mouseWheel: true,
+        click: true
       })
     })
     watch(
@@ -76,7 +87,11 @@ export default {
         }
       }
     )
-    return { wrapper, bs, divNodes }
+    const handleCityClick = (city) => {
+      store.commit('changeCity', city)
+      router.push('/')
+    }
+    return { wrapper, bs, divNodes, store, handleCityClick, currentCity }
   }
 }
 </script>

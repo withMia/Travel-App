@@ -1,8 +1,11 @@
 <template>
   <div id="app">
-    <router-link to="/"></router-link>
+    <router-view v-slot="{ Component }">
+      <keep-alive>
+        <component :is="Component" />
+      </keep-alive>
+    </router-view>
   </div>
-  <router-view />
 </template>
 
 <style></style>

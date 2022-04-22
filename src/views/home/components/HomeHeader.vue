@@ -9,18 +9,26 @@
     </div>
     <router-link to="/city">
       <div class="header-right">
-        {{ city }} <span class="iconfont arrow-down-icon">&#xeb6d;</span>
+        {{ currentCity }}
+        <span class="iconfont arrow-down-icon">&#xeb6d;</span>
       </div>
     </router-link>
   </div>
 </template>
 
 <script>
+import { useStore } from 'vuex'
+import { computed } from 'vue'
 export default {
   name: 'HomeHeader',
-  props: {
-    city: {
-      type: String
+  setup() {
+    const store = useStore()
+    const currentCity = computed(() => {
+      return store.state.city
+    })
+    return {
+      store,
+      currentCity
     }
   }
 }
@@ -52,9 +60,10 @@ export default {
     line-height: 0.62rem
     color: #ccc
   .header-right
-    width: 1.24rem
+    min-width: 1.04rem
     float: right
     text-align: center
+    padding: 0 0.1rem
     color: #fff
     .arrow-down-icon
       font-size: 0.24rem

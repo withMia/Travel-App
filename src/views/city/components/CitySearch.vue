@@ -15,6 +15,7 @@
             class="search-item border-bottom"
             v-for="item of list"
             :key="item.id"
+            @click="handleCityClick(item.name)"
           >
             {{ item.name }}
           </li>
@@ -33,7 +34,8 @@
 <script>
 import { watch, ref, onMounted, computed } from 'vue'
 import BetterScroll from 'better-scroll'
-
+import { useStore } from 'vuex'
+import router from '../../../router'
 export default {
   name: 'CitySearch',
   props: {
@@ -44,16 +46,29 @@ export default {
   },
   setup(props) {
     let searchContent = ref(null)
-    let scroll
+    let bs
+    const store = useStore()
+    const handleCityClick = (city) => {
+      store.commit('changeCity', city)
+      router.push('/')
+    }
     const hasNoData = computed(() => {
       return !list.value.length
     })
     onMounted(() => {
-      scroll = new BetterScroll(searchContent.value, {
-        movable: true,
-        mouseWheel: true
+      bs = new BetterScroll(searchContent.value, {
+        mouseWheel: true,
+        click: true,
+        observeDOM: true
       })
     })
+    // onActivated(() => {
+    //   bs = new BetterScroll(searchContent.value, {
+    //     mouseWheel: true,
+    //     click: true
+    //   })
+    //   console.log(bs)
+    // })
     let keyword = ref('')
     let timer = null
     let list = ref([])
@@ -65,6 +80,7 @@ export default {
         list.value = []
         return
       }
+
       timer = setTimeout(() => {
         const result = []
         for (let i in props.cities) {
@@ -85,8 +101,9 @@ export default {
       list,
       timer,
       searchContent,
-      scroll,
-      hasNoData
+      bs,
+      hasNoData,
+      handleCityClick
     }
   }
 }
@@ -116,11 +133,14 @@ export default {
   bottom: 0
   overflow: hidden
   z-index: 1
+  height: 100%
   .search-list
-    max-height: 26600px
+    height: 20000px
     .search-item
       line-height 0.62rem
       padding-left: 0.2rem
       color: #666
-      background: #fff
+      background: #eee
+      box-sizing: border-box
+      width: 100%
 </style>
