@@ -66,6 +66,7 @@ export default {
       touchStatus = true
     }
     const handleLetterClick = (e) => {
+      console.log(e.target.innerText)
       emit('scrollList', e.target.innerText)
     }
     return {

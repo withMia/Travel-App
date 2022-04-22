@@ -64,10 +64,7 @@ export default {
     onMounted(() => {
       bs = new BetterScroll(wrapper.value, {
         movable: true,
-        mouseWheel: true,
-        probeType: 3,
-        click: true,
-        pullUpLoad: true
+        mouseWheel: true
       })
     })
     watch(

@@ -1,26 +1,126 @@
 <template>
-  <div class="city-search">
-    <input class="search-input" type="text" placeholder="请输入城市名或拼音" />
+  <div>
+    <div class="search">
+      <input
+        v-model="keyword"
+        class="search-input"
+        type="text"
+        placeholder="请输入城市名或拼音"
+      />
+    </div>
+    <div class="search-content" v-show="keyword.length" ref="searchContent">
+      <div class="search-list">
+        <ul>
+          <li
+            class="search-item border-bottom"
+            v-for="item of list"
+            :key="item.id"
+          >
+            {{ item.name }}
+          </li>
+          <li class="search-item border-bottom" v-show="hasNoData">
+            没有找到匹配数据
+          </li>
+          <li class="search-item border-bottom" v-show="list.length">
+            共有 {{ list.length }} 条搜索结果
+          </li>
+        </ul>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
+import { watch, ref, onMounted, computed } from 'vue'
+import BetterScroll from 'better-scroll'
+
 export default {
-  name: 'CitySearch'
+  name: 'CitySearch',
+  props: {
+    cities: {
+      type: Object,
+      required: true
+    }
+  },
+  setup(props) {
+    let searchContent = ref(null)
+    let scroll
+    const hasNoData = computed(() => {
+      return !list.value.length
+    })
+    onMounted(() => {
+      scroll = new BetterScroll(searchContent.value, {
+        movable: true,
+        mouseWheel: true
+      })
+    })
+    let keyword = ref('')
+    let timer = null
+    let list = ref([])
+    watch(keyword, () => {
+      if (timer) {
+        clearTimeout(timer)
+      }
+      if (!keyword.value) {
+        list.value = []
+        return
+      }
+      timer = setTimeout(() => {
+        const result = []
+        for (let i in props.cities) {
+          props.cities[i].forEach((item) => {
+            if (
+              item.spell.indexOf(keyword.value) > -1 ||
+              item.name.indexOf(keyword.value) > -1
+            ) {
+              result.push(item)
+            }
+          })
+        }
+        list.value = result
+      }, 100)
+    })
+    return {
+      keyword,
+      list,
+      timer,
+      searchContent,
+      scroll,
+      hasNoData
+    }
+  }
 }
 </script>
 
 <style lang="stylus" scoped>
 @import '~styles/variables.styl'
-  .city-search
-    height: 0.72rem
-    background: $bgColor
+.border-bottom
+  &:before
+    border-color: #ccc
+.search
+  height: 0.72rem
+  background: $bgColor
+  padding: 0 0.1rem
+  .search-input
+    box-sizing: border-box
     padding: 0 0.1rem
-    .search-input
-      box-sizing: border-box
-      padding: 0 0.1rem
-      height 0.62rem
-      line-height: 0.62rem
-      text-align: center
-      width: 100%
+    height 0.62rem
+    line-height: 0.62rem
+    text-align: center
+    width: 100%
+.search-content
+  position: absolute
+  top: 1.58rem
+  left: 0
+  right: 0
+  bottom: 0
+  overflow: hidden
+  z-index: 1
+  .search-list
+    max-height: 26600px
+    .search-item
+      line-height 0.62rem
+      padding-left: 0.2rem
+      color: #666
+      background: #fff
 </style>
