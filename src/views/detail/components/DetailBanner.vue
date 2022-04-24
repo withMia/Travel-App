@@ -1,55 +1,41 @@
 <template>
   <div>
     <div class="banner" @click="handleBannerClick">
-      <img
-        class="banner-img"
-        src="https://youimg1.c-ctrip.com/target/fd/tg/g6/M01/3F/0C/CggYslcMiZaAMKb5AFIii5F_U5g388.jpg"
-        alt=""
-      />
+      <img class="banner-img" :src="bannerImg" alt="" />
       <div class="banner-info">
-        <div class="banner-title">大连圣亚海洋世界（AAAA景区）</div>
+        <div class="banner-title">{{ sightName }}</div>
         <div class="banner-number">
           <span class="iconfont banner-icon">&#xe63e;</span>
-          39
+          {{ gallaryImgs.length }}
         </div>
       </div>
     </div>
-    <base-gallary
-      @close="handleGallaryClose"
-      v-show="showGallary"
-      :imgList="imgList"
-    ></base-gallary>
+    <base-fade>
+      <base-gallary
+        @close="handleGallaryClose"
+        v-show="showGallary"
+        :imgList="gallaryImgs"
+      ></base-gallary>
+    </base-fade>
   </div>
 </template>
 
 <script>
 import BaseGallary from '@/base-ui/BaseGallary.vue'
+import BaseFade from '@/base-ui/BaseFade.vue'
+
 import { ref } from 'vue'
 
 export default {
   name: 'DetailBanner',
-  components: { BaseGallary },
+  components: { BaseGallary, BaseFade },
+  props: {
+    gallaryImgs: { type: Array, default: () => [] },
+    bannerImg: { type: String },
+    sightName: { type: String }
+  },
   setup() {
     const showGallary = ref(false)
-
-    const imgList = [
-      {
-        id: 1,
-        imgUrl:
-          'https://youimg1.c-ctrip.com/target/fd/tg/g6/M01/3F/0C/CggYslcMiZaAMKb5AFIii5F_U5g388.jpg'
-      },
-      {
-        id: 2,
-        imgUrl:
-          'https://youimg1.c-ctrip.com/target/fd/tg/g6/M01/3F/0C/CggYslcMiZaAMKb5AFIii5F_U5g388.jpg'
-      },
-      {
-        id: 3,
-        imgUrl:
-          'https://youimg1.c-ctrip.com/target/fd/tg/g6/M01/3F/0C/CggYslcMiZaAMKb5AFIii5F_U5g388.jpg'
-      }
-    ]
-
     const handleBannerClick = () => {
       showGallary.value = true
     }
@@ -58,7 +44,6 @@ export default {
       showGallary.value = false
     }
     return {
-      imgList,
       showGallary,
       handleBannerClick,
       handleGallaryClose

@@ -1,29 +1,29 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
-import Home from '../views/home/Home.vue'
-import City from '../views/city/City.vue'
-import Detail from '../views/detail/Detail.vue'
 
 const routes = [
   {
     path: '/',
     name: 'Home',
-    component: Home
+    component: () => import('@/views/home/Home.vue')
   },
   {
     path: '/city',
     name: 'City',
-    component: City
+    component: () => import('@/views/city/City.vue')
   },
   {
     path: '/detail/:id',
     name: 'Detail',
-    component: Detail
+    component: () => import('@/views/detail/Detail.vue')
   }
 ]
 
 const router = createRouter({
   history: createWebHashHistory(),
-  routes
+  routes,
+  scrollBehavior(to, from, savedPosition) {
+    return { top: 0 }
+  }
 })
 
 export default router

@@ -9,7 +9,6 @@
 </template>
 
 <script>
-//reactive, toRefs,
 import { onMounted, reactive, ref, toRefs, computed, onActivated } from 'vue'
 import HomeHeader from './components/HomeHeader.vue'
 import HomeSwiper from './components/HomeSwiper.vue'

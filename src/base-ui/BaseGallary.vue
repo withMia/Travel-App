@@ -5,7 +5,7 @@
         <template #swiper="{ rowdata }">
           <img
             class="gallary-img"
-            :src="rowdata.imgUrl"
+            :src="rowdata"
             alt="图片无法加载"
           /> </template
       ></base-swiper>
@@ -34,7 +34,6 @@ export default {
     const handleGallaryClick = () => {
       emit('close')
     }
-
     return { paginationOptions, handleGallaryClick }
   }
 }
