@@ -1,6 +1,8 @@
 @charset "utf-8";
-html {
+* {
   touch-action: manipulation;
+}
+html {
   background-color: #fff;
   color: #000;
   font-size: 12px;
@@ -196,4 +198,10 @@ hr {
 a {
   color: #25a4bb;
   text-decoration: none;
+}
+
+div,
+span,
+p {
+  caret-color: transparent;
 }

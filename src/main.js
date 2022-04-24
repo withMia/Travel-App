@@ -8,5 +8,6 @@ import 'styles/reset.css'
 import 'styles/border.css'
 // 移动端click事件延迟问题
 import 'styles/iconfont.css'
+import 'babel-polyfill'
 
 createApp(App).use(store).use(router).mount('#app')
