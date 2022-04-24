@@ -4,7 +4,7 @@
     :initial-slide="1"
     :loop="true"
     :autoplay="false"
-    :pagination="{ clickable: true }"
+    v-bind="paginationOptions"
   >
     <swiper-slide v-for="item of list" :key="item.id">
       <slot name="swiper" :rowdata="item"> </slot>
@@ -22,6 +22,10 @@ export default {
     list: {
       type: Array,
       required: true
+    },
+    paginationOptions: {
+      type: Object,
+      default: () => ({ pagination: { clickable: true } })
     }
   },
   components: {
@@ -29,9 +33,7 @@ export default {
     SwiperSlide
   },
   setup() {
-    return {
-      modules: [Pagination]
-    }
+    return { modules: [Pagination] }
   }
 }
 </script>
