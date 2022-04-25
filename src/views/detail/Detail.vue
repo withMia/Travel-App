@@ -18,7 +18,7 @@ import DetailHeader from './components/DetailHeader.vue'
 import DetailList from './components/DetailList.vue'
 import { reactive, onMounted, toRefs, onActivated } from 'vue'
 import axios from 'axios'
-import { useRoute, useRouter } from 'vue-router'
+import { useRoute } from 'vue-router'
 
 export default {
   name: 'Detail',
@@ -29,8 +29,6 @@ export default {
   },
   setup() {
     let route = useRoute()
-    let router = useRouter()
-
     let dataSet = reactive({
       sightName: '',
       bannerImg: '',
@@ -55,12 +53,14 @@ export default {
         })
         .then(getDetailInfoSucc)
     }
+
     onMounted(() => {
       getDetailInfo()
     })
     onActivated(() => {
       getDetailInfo()
     })
+
     return {
       ...toRefs(dataSet),
       route
