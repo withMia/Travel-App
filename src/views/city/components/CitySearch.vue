@@ -8,7 +8,7 @@
         placeholder="请输入城市名或拼音"
       />
     </div>
-    <div class="search-content" v-show="keyword.length" ref="searchContent">
+    <div class="search-content" v-show="keyword.length" ref="wrapper">
       <div class="search-list">
         <ul>
           <li
@@ -32,10 +32,11 @@
 </template>
 
 <script>
-import { watch, ref, onMounted, computed } from 'vue'
-import BetterScroll from 'better-scroll'
+import { watch, ref, computed, onDeactivated } from 'vue'
 import { useStore } from 'vuex'
 import router from '@/router'
+import { useBetterScroll } from '@/hooks/use-better-scroll.js'
+
 export default {
   name: 'CitySearch',
   props: {
@@ -45,24 +46,11 @@ export default {
     }
   },
   setup(props) {
-    let searchContent = ref(null)
-    let bs
     const store = useStore()
-    const handleCityClick = (city) => {
-      store.commit('changeCity', city)
-      router.push('/')
-    }
+    let keyword = ref('')
     const hasNoData = computed(() => {
       return !list.value.length
     })
-    onMounted(() => {
-      bs = new BetterScroll(searchContent.value, {
-        mouseWheel: true,
-        click: true,
-        observeDOM: true
-      })
-    })
-    let keyword = ref('')
     let timer = null
     let list = ref([])
     watch(keyword, () => {
@@ -73,7 +61,6 @@ export default {
         list.value = []
         return
       }
-
       timer = setTimeout(() => {
         const result = []
         for (let i in props.cities) {
@@ -89,11 +76,15 @@ export default {
         list.value = result
       }, 100)
     })
+    onDeactivated(() => {
+      keyword.value = ''
+    })
+    const [wrapper, bs, handleCityClick] = useBetterScroll(store, router, true)
     return {
       keyword,
       list,
       timer,
-      searchContent,
+      wrapper,
       bs,
       hasNoData,
       handleCityClick
@@ -128,7 +119,6 @@ export default {
   z-index: 1
   height: 100%
   .search-list
-    height: 20000px
     .search-item
       line-height 0.62rem
       padding-left: 0.2rem

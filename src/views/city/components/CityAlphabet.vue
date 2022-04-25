@@ -8,11 +8,7 @@
       @touchstart.prevent="handleTouchStart"
       @touchmove="handleTouchMove"
       @touchend="handleTouchEnd"
-      :ref="
-        (el) => {
-          divNodes[item] = el
-        }
-      "
+      :ref="(el) => (eleNodes[item] = el)"
     >
       {{ item }}
     </li>
@@ -20,7 +16,8 @@
 </template>
 
 <script>
-import { computed, onBeforeUpdate, onUpdated, ref } from 'vue'
+import { computed, onBeforeUpdate, onMounted, onUpdated, ref } from 'vue'
+import { useTouchAction } from '@/hooks/use-touch-action.js'
 export default {
   name: 'CityAlphabet',
   props: {
@@ -28,13 +25,8 @@ export default {
   },
   emits: ['scrollList'],
   setup(props, { emit }) {
-    let divNodes = ref({})
-    let touchStatus = false
-    let startY = 0
-    let timer = null
-    onBeforeUpdate(() => {
-      divNodes.value = {}
-    })
+    const eleNodes = ref([])
+    let startY = ref(0)
     const letters = computed(() => {
       const letters = []
       for (let i in props.cities) {
@@ -43,54 +35,24 @@ export default {
       return letters
     })
     onUpdated(() => {
-      startY = divNodes.value['A'].offsetTop
+      startY.value = eleNodes.value['A'].offsetTop
     })
-    let touchTimer = ref()
-    let touchTime = ref()
-
-    const handleTouchStart = (e) => {
-      touchStatus = true
-      touchTime.value = 0
-      touchTimer.value = setInterval(() => {
-        touchTime.value = touchTime.value + 1
-      }, 500)
-    }
-    const handleTouchMove = (e) => {
-      if (touchStatus) {
-        if (timer) {
-          clearTimeout(timer)
-        }
-        timer = setTimeout(() => {
-          const touchY = e.touches[0].clientY - 79
-          const index = Math.floor((touchY - startY) / 16)
-          if (index >= 0 && index < letters.value.length) {
-            emit('scrollList', letters.value[index])
-          }
-        }, 8)
-      }
-    }
-
-    const handleTouchEnd = (e) => {
-      touchStatus = true
-      let el = e.currentTarget
-      clearInterval(touchTimer.value)
-      if (touchTime.value < 1) {
-        if (el) {
-          el.click()
-        }
-      }
-    }
+    let [handleTouchStart, handleTouchMove, handleTouchEnd] = useTouchAction(
+      startY,
+      letters,
+      { emit }
+    )
     const handleLetterClick = (e) => {
       emit('scrollList', e.target.innerText)
     }
     return {
       handleLetterClick,
-      touchStatus,
       handleTouchStart,
       handleTouchMove,
       handleTouchEnd,
+      startY,
       letters,
-      divNodes
+      eleNodes
     }
   }
 }

@@ -39,7 +39,6 @@ export default {
     const handleBannerClick = () => {
       showGallary.value = true
     }
-
     const handleGallaryClose = () => {
       showGallary.value = false
     }

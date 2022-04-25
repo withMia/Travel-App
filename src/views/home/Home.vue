@@ -9,15 +9,13 @@
 </template>
 
 <script>
-import { onMounted, reactive, ref, toRefs, computed, onActivated } from 'vue'
+import { onMounted, toRefs, onActivated } from 'vue'
 import HomeHeader from './components/HomeHeader.vue'
 import HomeSwiper from './components/HomeSwiper.vue'
 import HomeIcons from './components/HomeIcons.vue'
 import HomeRecommend from './components/HomeRecommend.vue'
 import HomeWeekend from './components/HomeWeekend.vue'
-import axios from 'axios'
-import { useStore } from 'vuex'
-
+import { useHomeData } from '../../hooks/use-home-data'
 export default {
   name: 'Home',
   components: {
@@ -28,43 +26,19 @@ export default {
     HomeWeekend
   },
   setup() {
-    const store = useStore()
-    const city = computed(() => store.state.city)
-    let lastCity = ref('')
-    let dataSet = reactive({
-      city: '',
-      swiperList: [],
-      iconList: [],
-      recommendList: [],
-      weekendList: []
-    })
-    const getHomeInfoSucc = function (res) {
-      res = res.data
-      if (res.ret && res.data) {
-        dataSet.city = res.data.city
-        dataSet.swiperList = res.data.swiperList
-        dataSet.iconList = res.data.iconList
-        dataSet.recommendList = res.data.recommendList
-        dataSet.weekendList = res.data.weekendList
-      }
-    }
-    const getHomeInfo = function () {
-      axios.get('/api/index.json?city=' + city.value).then(getHomeInfoSucc)
-    }
+    const { city, dataSet, getHomeInfo } = useHomeData()
     onMounted(() => {
-      lastCity.value = city
+      dataSet.lastCity = city
       getHomeInfo()
     })
     onActivated(() => {
-      if (lastCity.value !== city.value) {
-        lastCity.value = city.value
+      if (dataSet.lastCity !== city) {
+        dataSet.lastCity = city
         getHomeInfo()
       }
     })
     return {
-      ...toRefs(dataSet),
-      city,
-      lastCity
+      ...toRefs(dataSet)
     }
   }
 }

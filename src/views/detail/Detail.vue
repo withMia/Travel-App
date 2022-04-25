@@ -16,10 +16,8 @@
 import DetailBanner from './components/DetailBanner.vue'
 import DetailHeader from './components/DetailHeader.vue'
 import DetailList from './components/DetailList.vue'
-import { reactive, onMounted, toRefs, onActivated } from 'vue'
-import axios from 'axios'
-import { useRoute } from 'vue-router'
-
+import { onMounted, toRefs, onActivated } from 'vue'
+import { useDetailData } from '../../hooks/use-detail-data'
 export default {
   name: 'Detail',
   components: {
@@ -28,32 +26,7 @@ export default {
     DetailList
   },
   setup() {
-    let route = useRoute()
-    let dataSet = reactive({
-      sightName: '',
-      bannerImg: '',
-      gallaryImgs: [],
-      categoryList: []
-    })
-    const getDetailInfoSucc = function (res) {
-      res = res.data
-      if (res.ret && res.data) {
-        dataSet.sightName = res.data.sightName
-        dataSet.bannerImg = res.data.bannerImg
-        dataSet.gallaryImgs = res.data.gallaryImgs
-        dataSet.categoryList = res.data.categoryList
-      }
-    }
-    const getDetailInfo = function () {
-      axios
-        .get('/api/detail.json', {
-          params: {
-            id: route.params.id
-          }
-        })
-        .then(getDetailInfoSucc)
-    }
-
+    const { dataSet, getDetailInfo } = useDetailData()
     onMounted(() => {
       getDetailInfo()
     })
@@ -62,8 +35,7 @@ export default {
     })
 
     return {
-      ...toRefs(dataSet),
-      route
+      ...toRefs(dataSet)
     }
   }
 }

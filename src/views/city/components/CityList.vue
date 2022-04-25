@@ -25,14 +25,10 @@
         </div>
       </div>
       <div
-        :ref="
-          (el) => {
-            divNodes[key] = el
-          }
-        "
         class="area"
         v-for="(item, key) of cities"
         :key="key"
+        :ref="(el) => (divNodes[key] = el)"
       >
         <div class="title border-topbottom">{{ key }}</div>
         <div class="item-list">
@@ -51,10 +47,10 @@
 </template>
 
 <script>
-import BetterScroll from 'better-scroll'
-import { onMounted, watch, ref, onBeforeUpdate, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { useStore } from 'vuex'
-import router from '@/router'
+import { useRouter } from 'vue-router'
+import { useBetterScroll } from '@/hooks/use-better-scroll.js'
 export default {
   name: 'CityList',
   props: {
@@ -65,32 +61,20 @@ export default {
   },
   setup(props) {
     const store = useStore()
+    const router = useRouter()
     const currentCity = computed(() => store.state.city)
-    let divNodes = ref({})
-    onBeforeUpdate(() => {
-      divNodes.value = {}
-    })
-    let wrapper = ref(null)
-    let bs
-    onMounted(() => {
-      bs = new BetterScroll(wrapper.value, {
-        mouseWheel: true,
-        click: true
-      })
-    })
+    let divNodes = ref([])
+
+    const [wrapper, bs, handleCityClick] = useBetterScroll(store, router, false)
     watch(
       () => props.letterClicked,
       () => {
-        if (props.letterClicked) {
+        if (props.letterClicked && bs.value) {
           const element = divNodes.value[props.letterClicked]
-          bs.scrollToElement(element)
+          bs.value.scrollToElement(element)
         }
       }
     )
-    const handleCityClick = (city) => {
-      store.commit('changeCity', city)
-      router.push('/')
-    }
     return { wrapper, bs, divNodes, store, handleCityClick, currentCity }
   }
 }
