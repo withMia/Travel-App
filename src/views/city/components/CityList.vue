@@ -54,7 +54,7 @@
 import BetterScroll from 'better-scroll'
 import { onMounted, watch, ref, onBeforeUpdate, computed } from 'vue'
 import { useStore } from 'vuex'
-import router from '../../../router'
+import router from '@/router'
 export default {
   name: 'CityList',
   props: {

@@ -14,8 +14,8 @@
 </template>
 
 <script>
-import BaseSwiper from '../../../base-ui/BaseSwiper.vue'
-import { pageNum } from '../../../utils/count-page-number.js'
+import BaseSwiper from '@/base-ui/BaseSwiper.vue'
+import { pageNum } from '@/utils/count-page-number.js'
 import { computed } from 'vue'
 
 export default {

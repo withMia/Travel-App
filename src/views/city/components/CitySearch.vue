@@ -35,7 +35,7 @@
 import { watch, ref, onMounted, computed } from 'vue'
 import BetterScroll from 'better-scroll'
 import { useStore } from 'vuex'
-import router from '../../../router'
+import router from '@/router'
 export default {
   name: 'CitySearch',
   props: {
@@ -62,13 +62,6 @@ export default {
         observeDOM: true
       })
     })
-    // onActivated(() => {
-    //   bs = new BetterScroll(searchContent.value, {
-    //     mouseWheel: true,
-    //     click: true
-    //   })
-    //   console.log(bs)
-    // })
     let keyword = ref('')
     let timer = null
     let list = ref([])
