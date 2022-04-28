@@ -1,4 +1,4 @@
-# travel-app
+# travel-app：仿去哪儿网App
 
 ## Project setup
 
